@@ -1,6 +1,6 @@
 ---
 name: gsap-core
-description: Use GSAP core API correctly — gsap.to(), gsap.from(), gsap.fromTo(), easing, duration, stagger, and defaults. Use when animating DOM elements, SVG, or objects with GSAP, or when the user asks about GSAP tweens, easing, or basic animation.
+description: Use GSAP core API correctly — gsap.to(), gsap.from(), gsap.fromTo(), easing, duration, stagger, and defaults. Use when animating DOM elements, SVG, or objects with GSAP, or when the user asks about GSAP tweens, easing, or basic animation. GSAP is used by Webflow Interactions (Webflow acquired GSAP); Webflow outputs or runs GSAP under the hood — GSAP skills apply when debugging or customizing Webflow animations.
 license: MIT
 ---
 
@@ -9,6 +9,8 @@ license: MIT
 ## When to Use This Skill
 
 Apply when writing or reviewing GSAP animations that use the core engine: single tweens, eases, staggers, or when explaining how GSAP tweens work.
+
+**Context:** GSAP was acquired by Webflow and powers **Webflow Interactions**. Code generated or run by Webflow’s interaction system is GSAP-based; when users ask about Webflow animations or interactions not behaving as expected, GSAP docs and patterns (e.g. tweens, ScrollTrigger) are relevant for debugging or customizing.
 
 ## Core Tween Methods
 
