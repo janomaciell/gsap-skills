@@ -29,6 +29,37 @@ Always use **property names in camelCase** in the vars object (e.g. `backgroundC
 - **repeat** — number or `-1` for infinite.
 - **yoyo** — boolean; with repeat, alternates direction.
 - **onComplete**, **onStart**, **onUpdate** — callbacks; scoped to the Animation instance itself (Tween or Timeline).
+- **immediateRender** — When `true` (default for **from()** and **fromTo()**), the tween’s start state is applied as soon as the tween is created (avoids flash of unstyled content and works well with staggered timelines). When **multiple from() or fromTo() tweens** target the same property of the same element, set **immediateRender: false** on the later one(s) so the first tween’s end state is not overwritten before it runs; otherwise the second animation may not be visible.
+
+## Transforms and CSS properties
+
+GSAP’s CSSPlugin (included in core) animates DOM elements. Use **camelCase** for CSS properties (e.g. `fontSize`, `backgroundColor`). Prefer GSAP’s **transform aliases** over the raw `transform` string: they apply in a consistent order (translation → scale → rotationX/Y → skew → rotation), are more performant, and work reliably across browsers.
+
+**Transform aliases (prefer over translateX(), rotate(), etc.):**
+
+| GSAP property | Equivalent CSS / note |
+|---------------|------------------------|
+| `x`, `y`, `z` | translateX/Y/Z (default unit: px) |
+| `xPercent`, `yPercent` | translateX/Y in %; use for percentage-based movement; work on SVG |
+| `scale`, `scaleX`, `scaleY` | scale; `scale` sets both X and Y |
+| `rotation` | rotate (default: deg; or `"1.25rad"`) |
+| `rotationX`, `rotationY` | 3D rotate (rotationZ = rotation) |
+| `skewX`, `skewY` | skew (deg or rad string) |
+| `transformOrigin` | transform-origin (e.g. `"left top"`, `"50% 50%"`) |
+
+Relative values work: `x: "+=20"`, `rotation: "-=30"`. Default units: x/y in px, rotation in deg.
+
+- **autoAlpha** — Prefer over `opacity` for fade in/out. When the value is `0`, GSAP also sets `visibility: hidden` (better rendering and no pointer events); when non-zero, `visibility` is set to `inherit`. Avoids leaving invisible elements blocking clicks.
+- **CSS variables** — GSAP can animate custom properties (e.g. `"--hue": 180`, `"--size": 100`). Supported in browsers that support CSS variables.
+- **svgOrigin** _(SVG only)_ — Like `transformOrigin` but in the SVG’s **global** coordinate space (e.g. `svgOrigin: "250 100"`). Use when several SVG elements should rotate or scale around a common point. Only one of `svgOrigin` or `transformOrigin` can be used. No percentage values; units optional.
+- **Directional rotation** — Append a suffix to rotation values (string): **`_short`** (shortest path), **`_cw`** (clockwise), **`_ccw`** (counter-clockwise). Applies to `rotation`, `rotationX`, `rotationY`. Example: `rotation: "-170_short"` (20° clockwise instead of 340° counter-clockwise); `rotationX: "+=30_cw"`.
+- **clearProps** — Comma-separated list of property names (or `"all"` / `true`) to **remove** from the element’s inline style when the tween completes. Use when a class or other CSS should take over after the animation. Clearing any transform-related property (e.g. `x`, `scale`, `rotation`) clears the **entire** transform.
+
+```javascript
+gsap.to(".box", { x: 100, rotation: "360_cw", duration: 1 });
+gsap.to(".fade", { autoAlpha: 0, duration: 0.5, clearProps: "visibility" });
+gsap.to(svgEl, { rotation: 90, svgOrigin: "100 100" });
+```
 
 ## Targets
 
@@ -139,8 +170,17 @@ Set project-wide Tween defaults with **gsap.defaults()**:
 gsap.defaults({ duration: 0.6, ease: "power2.out" });
 ```
 
+## Best practices
+
+- ✅ Use **property names in camelCase** in vars (e.g. `backgroundColor`, `rotationX`).
+- ✅ Prefer **transform aliases** (`x`, `y`, `scale`, `rotation`, `xPercent`, `yPercent`, etc.) over animating the raw `transform` string; use **autoAlpha** instead of `opacity` for fade in/out when elements should be hidden and non-interactive at 0.
+- ✅ Use documented built-in eases; use CustomEase when a custom curve is needed.
+- ✅ Store the tween/timeline return value when controlling playback (pause, play, reverse, kill).
+
 ## Do Not
 
-- Animate layout-heavy properties (e.g. `width`, `height`, `top`, `left`) when **transform** properties (`x`, `y`, `scaleX`, `scaleY`, `rotation`) can achieve the same effect; prefer transforms for better performance.
-- Use invalid or non-existent ease names; stick to documented eases.
-- Forget that **gsap.from()** uses the element’s current state as the end state; the initial values in the tween will be applied immediately unless `immediateRender: false` is in the `vars`.
+- ❌ Animate layout-heavy properties (e.g. `width`, `height`, `top`, `left`) when transform aliases (`x`, `y`, `scale`, `rotation`) can achieve the same effect; prefer transforms for better performance.
+- ❌ Use both **svgOrigin** and **transformOrigin** on the same SVG element; only one applies.
+- ❌ Rely on the default **immediateRender: true** when stacking multiple **from()** or **fromTo()** tweens on the same property of the same target; set **immediateRender: false** on the later tweens so they animate correctly.
+- ❌ Use invalid or non-existent ease names; stick to documented eases.
+- ❌ Forget that **gsap.from()** uses the element’s current state as the end state; the initial values in the tween will be applied immediately unless `immediateRender: false` is in the `vars`.

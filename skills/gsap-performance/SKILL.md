@@ -14,8 +14,8 @@ Apply when optimizing GSAP animations for smooth 60fps, reducing layout/paint co
 
 Animating **transform** (`x`, `y`, `scaleX`, `scaleY`, `rotation`, `rotationX`, `rotationY`, `skewX`, `skewY`) and **opacity** keeps work on the compositor and avoids layout and most paint. Avoid animating layout-heavy properties when a transform can achieve the same effect.
 
-- Prefer: **x**, **y**, **scale**, **rotation**, **opacity**.
-- Avoid when possible: **width**, **height**, **top**, **left**, **margin**, **padding** (they trigger layout and can cause jank).
+- ✅ Prefer: **x**, **y**, **scale**, **rotation**, **opacity**.
+- ❌ Avoid when possible: **width**, **height**, **top**, **left**, **margin**, **padding** (they trigger layout and can cause jank).
 
 GSAP’s **x** and **y** use transforms (translate) by default; use them instead of **left**/**top** for movement.
 
@@ -62,9 +62,16 @@ document.querySelector("#container").addEventListener("mousemove", (e) => {
 - Pause or kill off-screen or inactive animations when they’re not visible (e.g. when the user navigates away).
 - Avoid animating huge numbers of properties on many elements at once; simplify or sequence if needed.
 
+## Best practices
+
+- ✅ Animate **transform** and **opacity**; use **will-change** in CSS only on elements that animate.
+- ✅ Use **stagger** instead of many separate tweens with manual delays when the animation is the same.
+- ✅ Use **gsap.quickTo()** for frequently updated properties (e.g. mouse followers).
+- ✅ Clean up or kill off-screen animations; call **ScrollTrigger.refresh()** when layout changes, debounced when possible.
+
 ## Do Not
 
-- Animate **width**/ **height**/ **top**/ **left** for movement when **x**/ **y**/ **scale** can achieve the same look.
-- Set **will-change** or **force3D** on every element “just in case”; use for elements that are actually animating.
-- Create hundreds of overlapping tweens or ScrollTriggers without testing on low-end devices.
-- Ignore cleanup; stray tweens and ScrollTriggers keep running and can hurt performance and correctness.
+- ❌ Animate **width**/ **height**/ **top**/ **left** for movement when **x**/ **y**/ **scale** can achieve the same look.
+- ❌ Set **will-change** or **force3D** on every element “just in case”; use for elements that are actually animating.
+- ❌ Create hundreds of overlapping tweens or ScrollTriggers without testing on low-end devices.
+- ❌ Ignore cleanup; stray tweens and ScrollTriggers keep running and can hurt performance and correctness.

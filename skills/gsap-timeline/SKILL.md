@@ -89,7 +89,14 @@ master.to(".c", { opacity: 0 }, "+=0.2");
 - **tl.progress(0.5)** — seek to 50%.
 - **tl.kill()** — kill timeline and (by default) its children.
 
+## Best practices
+
+- ✅ Use the **position parameter** (third argument) to place tweens at specific times or relative to labels.
+- ✅ Add **labels** with `addLabel()` for readable, maintainable sequencing.
+- ✅ Pass **defaults** into the timeline constructor so child tweens inherit duration, ease, etc.
+- ✅ Put ScrollTrigger on the timeline (or top-level tween), not on tweens inside a timeline.
+
 ## Do Not
 
-- Forget that **duration** on the timeline constructor is not the same as tween duration; timeline “duration” is determined by its children.
-- Nest animations that contain a ScrollTrigger; ScrollTriggers should only be on top-level Tweens/Timelines.
+- ❌ Forget that **duration** on the timeline constructor is not the same as tween duration; timeline “duration” is determined by its children.
+- ❌ Nest animations that contain a ScrollTrigger; ScrollTriggers should only be on top-level Tweens/Timelines.

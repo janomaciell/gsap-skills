@@ -37,9 +37,9 @@ useGSAP(() => {
 }, { scope: containerRef });
 ```
 
-- Pass a **scope** (ref or element) so selectors like `.box` are scoped to that root.
-- Cleanup (reverting animations and ScrollTriggers) runs automatically on unmount.
-- Use **contextSafe** from the hook's return value to wrap callbacks (e.g. onComplete) so they no-op after unmount and avoid React warnings.
+- ✅ Pass a **scope** (ref or element) so selectors like `.box` are scoped to that root.
+- ✅ Cleanup (reverting animations and ScrollTriggers) runs automatically on unmount.
+- ✅ Use **contextSafe** from the hook's return value to wrap callbacks (e.g. onComplete) so they no-op after unmount and avoid React warnings.
 
 ## Refs for Targets
 
@@ -73,8 +73,8 @@ useEffect(() => {
 }, []);
 ```
 
-- Pass a **scope** (ref or element) as the second argument so selectors are scoped to that node.
-- **Always** return a cleanup that calls **ctx.revert()**.
+- ✅ Pass a **scope** (ref or element) as the second argument so selectors are scoped to that node.
+- ✅ **Always** return a cleanup that calls **ctx.revert()**.
 
 ## Context-Safe Callbacks
 
@@ -116,11 +116,17 @@ GSAP runs in the browser. Do not call gsap or ScrollTrigger during SSR.
 - Use **useGSAP** (or useEffect) so all GSAP code runs only on the client.
 - If GSAP is imported at top level, ensure the app does not execute gsap.* or ScrollTrigger.* during server render. Dynamic import inside useEffect is an option if tree-shaking or bundle size is a concern.
 
+## Best practices
+
+- ✅ Use **useGSAP()** when @gsap/react is available; use **gsap.context()** + **ctx.revert()** in useEffect when it is not.
+- ✅ Use refs for targets and pass a **scope** so selectors are limited to the component.
+- ✅ Run GSAP only on the client (useGSAP or useEffect); do not call gsap or ScrollTrigger during SSR.
+
 ## Do Not
 
-- Animate using selector strings that can match elements outside the current component unless a `scope` is defined in useGSAP or gsap.context() so only elements inside the component are affected.
-- Skip cleanup; always revert context or revert tweens/ScrollTriggers in the effect return to avoid leaks and updates on unmounted nodes.
-- Run GSAP or ScrollTrigger during SSR; keep all usage inside client-only lifecycle (e.g. useGSAP).
+- ❌ Animate using selector strings that can match elements outside the current component unless a `scope` is defined in useGSAP or gsap.context() so only elements inside the component are affected.
+- ❌ Skip cleanup; always revert context or kill tweens/ScrollTriggers in the effect return to avoid leaks and updates on unmounted nodes.
+- ❌ Run GSAP or ScrollTrigger during SSR; keep all usage inside client-only lifecycle (e.g. useGSAP).
 
 
 ### Learn More
