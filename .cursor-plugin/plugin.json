@@ -1,7 +1,7 @@
 {
   "name": "gsap-skills",
   "version": "1.0.0",
-  "description": "AI skills for GSAP — core animations, timelines, ScrollTrigger, plugins, utilities, React integration, and performance best practices",
+  "description": "Official GSAP skills for Cursor, Claude and other AI agents — core animations, timelines, ScrollTrigger, plugins, utilities, React integration, and performance best practices",
   "author": {
     "name": "GreenSock",
     "email": "info@greensock.com",
@@ -14,11 +14,11 @@
     "animation",
     "scrolltrigger",
     "timeline",
-    "react",
+    "react animation",
     "performance",
     "tweens",
     "plugins"
   ],
-  "logo": "assets/gsap-white.svg",
+  "logo": "./assets/gsap-icon-square.svg",
   "skills": ["skills"]
 }

@@ -1,6 +1,6 @@
 {
   "name": "gsap-skills",
-  "description": "AI skills for correct GSAP usage — animations, timelines, ScrollTrigger, plugins, utilities, React, and performance",
+  "description": "Official GSAP skills for Claude, Cursor, and other AI agents — animations, timelines, ScrollTrigger, plugins, utilities, React, and performance",
   "version": "1.0.0",
   "skills": "./skills/"
 }

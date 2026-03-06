@@ -7,7 +7,7 @@
     {
       "name": "gsap-skills",
       "source": "./",
-      "description": "AI skills for GSAP — core animations, timelines, ScrollTrigger, plugins, utilities, React integration, and performance best practices."
+      "description": "Official GSAP skills for Cursor, Claude and other AI agents — core animations, timelines, ScrollTrigger, plugins, utilities, React integration, and performance best practices."
     }
   ]
 }
