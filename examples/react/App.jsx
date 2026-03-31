@@ -1,46 +1,116 @@
 /**
- * Minimal GSAP React example — follows gsap-react skill: useGSAP, scope, cleanup.
- * No selector without scope; refs for targets; automatic revert on unmount.
+ * GSAP React + Vite example — follows gsap-vite skill patterns:
+ * - Plugins registered in main.jsx (not here)
+ * - useGSAP with scope for HMR-safe, StrictMode-safe animations
+ * - Hero entrance timeline
+ * - Scroll-triggered card reveal with ScrollTrigger
+ * - No selector without scope
  */
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Register useGSAP once (could be in main.jsx for app-level)
-gsap.registerPlugin(useGSAP);
+// ─── Hero Section ────────────────────────────────────────────────────────────
+function Hero() {
+  const ref = useRef(null);
 
-function App() {
-  const containerRef = useRef(null);
-  const boxRef = useRef(null);
-
-  useGSAP(
-    () => {
-      // Scoped to containerRef — selectors only match inside container
-      gsap.to(boxRef.current, { x: 100, duration: 0.6, ease: "power2" });
-      gsap.from(".item", { autoAlpha: 0, y: 20, stagger: 0.1 });
-    },
-    { scope: containerRef }
-  );
+  useGSAP(() => {
+    // Staggered entrance timeline — scoped to this component's root
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    tl.from("h1",     { autoAlpha: 0, y: 60, duration: 1 })
+      .from("p",      { autoAlpha: 0, y: 30, duration: 0.8 }, "-=0.5")
+      .from(".cta",   { autoAlpha: 0, scale: 0.9, duration: 0.6 }, "-=0.4");
+  }, { scope: ref });
 
   return (
-    <div ref={containerRef} style={{ padding: "2rem" }}>
-      <h1>GSAP React — useGSAP + scope + cleanup</h1>
-      <div
-        ref={boxRef}
-        className="box"
+    <section ref={ref} style={{ padding: "6rem 2rem", textAlign: "center" }}>
+      <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>
+        GSAP + React + Vite
+      </h1>
+      <p style={{ fontSize: "1.25rem", marginBottom: "2rem", opacity: 0.7 }}>
+        Entrance animation — staggered timeline, scoped to this component.
+      </p>
+      <button
+        className="cta"
         style={{
-          width: 80,
-          height: 80,
+          padding: "0.75rem 2rem",
+          fontSize: "1rem",
           background: "#0fa",
+          border: "none",
           borderRadius: 8,
-          marginBottom: "1rem",
+          cursor: "pointer",
         }}
-      />
-      <div className="item" style={{ margin: "0.5rem 0" }}>Item 1</div>
-      <div className="item" style={{ margin: "0.5rem 0" }}>Item 2</div>
-      <div className="item" style={{ margin: "0.5rem 0" }}>Item 3</div>
-    </div>
+      >
+        Get Started
+      </button>
+    </section>
   );
 }
 
-export default App;
+// ─── Cards Section (Scroll Reveal) ───────────────────────────────────────────
+const CARDS = [
+  { title: "ScrollTrigger", desc: "Scroll-linked animation & pinning" },
+  { title: "useGSAP", desc: "HMR-safe, StrictMode-safe hook" },
+  { title: "Reusable Hooks", desc: "useGSAPEntrance, useGSAPScrollReveal" },
+];
+
+function Cards() {
+  const ref = useRef(null);
+
+  useGSAP(() => {
+    gsap.from(".card", {
+      autoAlpha: 0,
+      y: 50,
+      stagger: 0.15,
+      duration: 0.7,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ref.current,
+        start: "top 80%",
+        once: true, // plays once; doesn't replay on scroll back
+      },
+    });
+  }, { scope: ref });
+
+  return (
+    <section
+      ref={ref}
+      style={{
+        display: "flex",
+        gap: "1.5rem",
+        padding: "4rem 2rem",
+        justifyContent: "center",
+        flexWrap: "wrap",
+      }}
+    >
+      {CARDS.map((c) => (
+        <div
+          key={c.title}
+          className="card"
+          style={{
+            background: "#111",
+            border: "1px solid #333",
+            borderRadius: 12,
+            padding: "2rem",
+            width: 240,
+            textAlign: "center",
+          }}
+        >
+          <h3 style={{ color: "#0fa", marginBottom: "0.5rem" }}>{c.title}</h3>
+          <p style={{ opacity: 0.7 }}>{c.desc}</p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+export default function App() {
+  return (
+    <div style={{ minHeight: "200vh", background: "#000", color: "#fff", fontFamily: "system-ui, sans-serif" }}>
+      <Hero />
+      <Cards />
+    </div>
+  );
+}

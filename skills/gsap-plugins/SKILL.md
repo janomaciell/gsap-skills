@@ -28,6 +28,39 @@ gsap.registerPlugin(ScrollToPlugin, Flip, Draggable);
 - ✅ Register before using the plugin in any tween or API call.
 - ✅ In React, register at top level or once in the app (e.g. before first useGSAP); do not register inside a component that re-renders. useGSAP is a plugin that needs to be registered before use.
 
+### Vite: Import from plugin path for tree-shaking
+
+In a **Vite** (or any bundler) project, always import from the plugin's specific path so Vite only bundles what you use:
+
+```javascript
+// ✅ Correct — Vite tree-shakes each import separately
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Flip } from 'gsap/Flip'
+import { SplitText } from 'gsap/SplitText'
+import { Observer } from 'gsap/Observer'
+
+// ❌ Avoid — loads all of gsap, bypasses tree-shaking
+import gsap, { ScrollTrigger, Flip } from 'gsap'
+```
+
+### React + Vite: Register in `main.jsx`
+
+In a React + Vite app, register **all plugins once** in `src/main.jsx` before `ReactDOM.createRoot`:
+
+```jsx
+// src/main.jsx
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Flip } from 'gsap/Flip'
+import { Observer } from 'gsap/Observer'
+import { useGSAP } from '@gsap/react'
+
+gsap.registerPlugin(ScrollTrigger, Flip, Observer, useGSAP)
+// ... ReactDOM.createRoot(...).render(<App />)
+```
+
+This ensures plugins are registered before any component mounts and aren't re-registered on re-renders.
+
 ## Scroll
 
 ### ScrollToPlugin

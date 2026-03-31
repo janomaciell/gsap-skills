@@ -70,7 +70,8 @@ Clone this repo and copy the skill folders into the appropriate directory for yo
 | **gsap-scrolltrigger** | ScrollTrigger: scroll-linked animations, pinning, scrub, triggers, refresh & cleanup |
 | **gsap-plugins** | Plugins: ScrollToPlugin, ScrollSmoother, Flip, Draggable, Inertia, Observer, SplitText, ScrambleText, SVG & physics plugins, CustomEase, EasePack, GSDevTools, etc. |
 | **gsap-utils** | gsap.utils: clamp, mapRange, normalize, interpolate, random, snap, toArray, selector, wrap, pipe, and other helpers |
-| **gsap-react** | React: useGSAP hook, refs, `gsap.context()`, cleanup, SSR |
+| **gsap-react** | React: useGSAP hook, refs, `gsap.context()`, cleanup, HMR-safe, Vite setup |
+| **gsap-vite** | React + Vite: full setup, `main.jsx` registration, reusable hooks (`useGSAPEntrance`, `useGSAPScrollReveal`, `useGSAPParallax`), project enhancement workflow |
 | **gsap-performance** | Performance: transforms over layout props, will-change, batching, ScrollTrigger tips |
 | **gsap-frameworks** | Vue, Svelte, etc.: lifecycle, scoping selectors, cleanup on unmount |
 
@@ -137,6 +138,7 @@ gsap-skills/
     gsap-react/      SKILL.md
     gsap-performance/  SKILL.md
     gsap-frameworks/ SKILL.md
+    gsap-vite/       SKILL.md   # React + Vite setup, hooks, project enhancer
   examples/         # Minimal reference demos (vanilla + React)
 ```
 
